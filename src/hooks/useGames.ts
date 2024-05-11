@@ -3,6 +3,7 @@ import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
 import useData from "./useData";
 import { Genre } from "./useGenres";
+import { GameQuery } from "../App";
 
 
 export interface Platform{
@@ -24,10 +25,13 @@ interface FetchGamesResponse {
     results:Game[];
 }
 
-const useGames = (selectedGenre:Genre | null, selectedPlatform:Platform | null)=>useData<Game>('/games', 
+const useGames = (gameQuery:GameQuery) => 
+useData<Game>('/games', 
 {params:
-  {genres:selectedGenre?.id, 
-  platforms:selectedPlatform?.id}},
-  [selectedGenre?.id, selectedPlatform?.id])
+  {genres:gameQuery.genre?.id, 
+  platforms:gameQuery.platform?.id,
+  ordering:gameQuery.sortOrder
+  }},
+  [gameQuery])
 
 export default useGames
